@@ -149,7 +149,8 @@ namespace KTGK.Controllers
         [ActionName("Filter")]
         public ActionResult Index(string value)
         {
-            var x = Request.Form[""];
+            var x = Request.Form["column"];
+            var y = x;
 
             return View("Index");
         }

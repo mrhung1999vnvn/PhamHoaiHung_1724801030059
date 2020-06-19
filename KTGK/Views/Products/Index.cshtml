@@ -1,5 +1,8 @@
-﻿@model IEnumerable<KTGK.Models.Products>
+﻿@*@model IEnumerable<KTGK.Models.Products>*@
 
+
+@model PagedList.IPagedList<KTGK.Models.Products>
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,14 +19,19 @@
             </p>
             <p class="col-md-6">
                 Sort :
+                @using (Html.BeginForm(actionName: "Filter", controllerName: "Products"))
+                {
                     <select name="column" class="custom-select">
-                        <option selected>Open collumn sort</option>
+                        <option selected>Filter</option>
                         @foreach (var item in ViewBag.SelectedList)
                         {
                             <option value="@item.Id">@item.Name</option>
                         }
                     </select>
-                    <a href="@Url.Action("Filter", "Products")" class="btn btn-primary" >Filter</a> 
+                    <input type="submit" value="Submit" />
+                    @*<a href="@Url.Action("Filter", "Products")" class="btn btn-primary">Filter</a>*@
+                }
+
 
             </p>
         </div>
@@ -44,16 +52,16 @@
                     @Html.ActionLink("Id", "Sort", new { Sorting_Order = ViewBag.SortingName })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Code)
+                    @*@Html.DisplayNameFor(model => model)*@
                 </th>
                 <th>
                     @Html.ActionLink("Name", "Sort", new { Sorting_Order = ViewBag.SortingName })
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ShortName)
+                    @*@Html.DisplayNameFor(model => model.ShortName)*@
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Note)
+                    @*@Html.DisplayNameFor(model => model.Note)*@
                 </th>
                 <th></th>
             </tr>
@@ -85,7 +93,9 @@
             }
 
         </table>
-
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @Html.PagedListPager(Model, Page_No =>Url.Action("Index",
+            new { Page_No, Sorting_Order= ViewBag.CurrentSortOrder, Filter_Value = ViewBag.FilterValue }))
     </div>
 </div>
 
